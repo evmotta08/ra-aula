@@ -43,7 +43,7 @@
   src="models/astronauta.glb"
   alt="Astronauta em 3D"
   ar
-  ar-modes="webxr scene-viewer quick-look"
+  ar-modes="scene-viewer webxr quick-look"
   ar-scale="auto"
   camera-controls
   touch-action="pan-y"
@@ -59,10 +59,18 @@
   <button onclick="aproximar()">Aproximar</button>
   <button onclick="afastar()">Afastar</button>
 </div>
+<p id="aviso" style="display:none;text-align:center;color:#ffd166;padding:6px 16px;margin:0;font-size:.9rem"></p>
 <footer>Funciona no Chrome (Android) e no Safari (iPhone). Se o botão não aparecer, o aparelho não suporta RA pela web.</footer>
 
 <script>
   const mv = document.getElementById('mv');
+  mv.addEventListener('load', () => {
+    if (!mv.canActivateAR) {
+      const a = document.getElementById('aviso');
+      a.style.display = 'block';
+      a.textContent = 'Este aparelho ou navegador não liberou a RA. Abra no Chrome (não dentro do WhatsApp ou da câmera) e instale "Serviços do Google Play para RA".';
+    }
+  });
   function girar() { mv.autoRotate = !mv.autoRotate; }
   function ajustar(f) {
     const o = mv.getCameraOrbit();
