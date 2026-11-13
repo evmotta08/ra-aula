@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Realidade Aumentada na sua mesa</title>
+<script type="module" src="model-viewer.min.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+    background: radial-gradient(circle at 50% 20%, #1b2a4a, #080c18 70%);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #eef2ff;
+  }
+  header { padding: 20px 20px 4px; text-align: center; }
+  h1 { margin: 0; font-size: 1.4rem; }
+  header p { margin: 6px 0 0; color: #a5b4d4; font-size: .95rem; }
+  model-viewer { flex: 1; width: 100%; min-height: 60vh; --poster-color: transparent; }
+  .ar-btn {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #ffd166; color: #1a1a1a; border: 0; border-radius: 999px;
+    padding: 14px 28px; font-size: 1.05rem; font-weight: 700;
+    box-shadow: 0 6px 20px rgba(0,0,0,.45);
+  }
+  .controles { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 10px; }
+  .controles button {
+    background: #26365e; color: #eef2ff; border: 1px solid #3d5190;
+    border-radius: 10px; padding: 9px 14px; font-size: .9rem;
+  }
+  .controles button:active { background: #3d5190; }
+  footer { text-align: center; font-size: .8rem; color: #7d8bb0; padding: 8px 12px 16px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Realidade Aumentada na sua mesa</h1>
+  <p>Toque no botão amarelo e aponte a câmera para o chão ou para a mesa.</p>
+</header>
+
+<model-viewer
+  id="mv"
+  src="models/astronauta.glb"
+  alt="Astronauta em 3D"
+  ar
+  ar-modes="webxr scene-viewer quick-look"
+  ar-scale="auto"
+  camera-controls
+  touch-action="pan-y"
+  auto-rotate
+  shadow-intensity="1.2"
+  exposure="1.1"
+  environment-image="neutral">
+  <button slot="ar-button" class="ar-btn">Ver em RA</button>
+</model-viewer>
+
+<div class="controles">
+  <button onclick="girar()">Parar/Girar</button>
+  <button onclick="aproximar()">Aproximar</button>
+  <button onclick="afastar()">Afastar</button>
+</div>
+<footer>Funciona no Chrome (Android) e no Safari (iPhone). Se o botão não aparecer, o aparelho não suporta RA pela web.</footer>
+
+<script>
+  const mv = document.getElementById('mv');
+  function girar() { mv.autoRotate = !mv.autoRotate; }
+  function ajustar(f) {
+    const o = mv.getCameraOrbit();
+    mv.cameraOrbit = `${o.theta}rad ${o.phi}rad ${o.radius * f}m`;
+  }
+  function aproximar() { ajustar(0.8); }
+  function afastar() { ajustar(1.25); }
+</script>
+</body>
+</html>
